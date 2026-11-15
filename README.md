@@ -135,10 +135,35 @@ runs the same suite against PostgreSQL 16.
 
 ## Deployment
 
-Deployment evidence is recorded in this section once the live
-deployment on the fleet server is verified (host, ports, health check,
-and an authenticated round trip). Until then this section makes no
-deployment claim.
+**Status on 2026-11-15: deployment blocked, host unreachable. No
+deployment is claimed.**
+
+The intended target is BlackBoxV2 (Ubuntu, Tailscale 100.83.221.65),
+running the Compose stack in this repo under the project name
+`fde-backend` (containers `fde-backend-app` and `fde-backend-db`, the
+app bound to the tailnet address on port 8100).
+
+What was verified on 2026-11-15 between 11:24 and 11:34 EST, over
+repeated attempts:
+
+- The Tailscale tunnel route works: a control connection to
+  BlackBoxV3 over the identical route answered with its SSH banner.
+- BlackBoxV2 accepts TCP connections at the tailnet layer (ports 22,
+  80, 443, 3000, 8080, 9000 all connect), but no service on the host
+  answers: SSH sends no banner within 45 seconds and the connection
+  is closed, and HTTP probes receive no response.
+- Conclusion: the host's userspace is not reachable (the machine
+  appears to be off, asleep, or hung; which of these cannot be
+  distinguished remotely). SSH access is impossible, so Docker could
+  not be inspected and nothing was deployed, started, or modified on
+  the host.
+
+The deploy is a single step once the host is back: clone this repo on
+BlackBoxV2, create `.env` from `.env.example` with fresh secrets
+generated on the server, run `docker compose up -d --build`, then
+verify `/health` over the tailnet and record an authenticated round
+trip here. The stack itself is already proven by CI, which builds the
+Compose stack and smoke-tests the health endpoint on every push.
 
 ## License
 
