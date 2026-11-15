@@ -1,0 +1,35 @@
+name: fde-backend
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: fde-backend-db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-fde}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-fde_password}
+      POSTGRES_DB: ${POSTGRES_DB:-fde}
+    volumes:
+      - fde-backend-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-fde} -d ${POSTGRES_DB:-fde}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  app:
+    build: .
+    container_name: fde-backend-app
+    environment:
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-fde}:${POSTGRES_PASSWORD:-fde_password}@db:5432/${POSTGRES_DB:-fde}
+      JWT_SECRET: ${JWT_SECRET:-dev-only-secret-change-me}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-}
+    ports:
+      - "${APP_BIND:-0.0.0.0}:${APP_PORT:-8100}:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  fde-backend-db-data:
+    name: fde-backend-db-data
