@@ -14,6 +14,8 @@ here.
 personal fleet server. It is not a production system and has no real
 users or customers.
 
+Project site: https://jesunahmadushno.github.io/fde-backend-service/
+
 ## What it demonstrates
 
 - **Authentication:** registration with argon2-hashed passwords, login
