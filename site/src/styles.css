@@ -6,6 +6,7 @@
 @import url("./base.css");
 /* Hallmark · pre-emit critique: P4 H4 E4 S5 R4 V4 · weakest: V, the sibling dashboards share the register table; the drawn sheet and the diagram carry the difference */
 /* Hallmark · dismissed 58 · the closing screen holds the deployment record and the colophon, each fact printed once; cutting record facts to fit the word budget would falsify the sheet */
+/* Design unification 2026-11-15: header bar, section rhythm and footer colophon with the shared support block follow the llm-observability reference patterns; the Blueprint token sheet dealt for this site is kept; this pass adds the tests-per-file chart from the committed counts; data, copy and results untouched */
 /* Hallmark · sweep: sloplint --render, 0 FAIL · the font capture WARN is the sandbox browser failing to reach fonts.googleapis.com; the live site serves the same link tags and the faces load for visitors */
 
 h1,
@@ -363,6 +364,45 @@ tbody tr:hover {
 .two-col .spec {
   grid-template-columns: minmax(0, 1fr);
   margin-top: var(--space-lg);
+}
+.chart-title {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: 600;
+  letter-spacing: var(--tracking-display);
+  color: var(--color-ink);
+  margin: var(--space-xl) 0 var(--space-sm);
+}
+.test-chart {
+  display: grid;
+  gap: var(--space-xs);
+}
+.test-row {
+  display: grid;
+  grid-template-columns: minmax(120px, 180px) minmax(0, 1fr) 40px;
+  align-items: center;
+  gap: var(--space-md);
+}
+.test-name {
+  color: var(--color-ink-2);
+  font-size: var(--text-sm);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.test-bar {
+  display: block;
+  height: 12px;
+  border: var(--rule-hair) solid var(--color-rule-2);
+}
+.test-fill {
+  display: block;
+  height: 100%;
+  background: var(--color-ink);
+}
+.test-count {
+  text-align: right;
+  color: var(--color-ink);
 }
 
 /* Endpoint detail */

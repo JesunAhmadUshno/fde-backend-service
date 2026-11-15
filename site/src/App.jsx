@@ -229,6 +229,7 @@ const CI_NOTES = {
 };
 
 export default function App() {
+  const maxTests = Math.max(...data.tests.perFile.map((f) => f.count));
   const [query, setQuery] = useState("");
   const [group, setGroup] = useState("all");
   const [method, setMethod] = useState("all");
@@ -572,6 +573,22 @@ export default function App() {
                   </dd>
                 </div>
               </dl>
+            </div>
+            <h3 className="chart-title">Tests per file</h3>
+            <div
+              className="test-chart"
+              role="img"
+              aria-label={`Bar chart of tests per file: ${data.tests.perFile.map((f) => `${f.file} has ${f.count}`).join(", ")}`}
+            >
+              {data.tests.perFile.map((f) => (
+                <div className="test-row" key={f.file}>
+                  <span className="test-name mono">{f.file.replace("tests/", "")}</span>
+                  <span className="test-bar">
+                    <span className="test-fill" style={{ width: `${(f.count / maxTests) * 100}%` }} />
+                  </span>
+                  <span className="test-count num">{f.count}</span>
+                </div>
+              ))}
             </div>
           </div>
         </section>
