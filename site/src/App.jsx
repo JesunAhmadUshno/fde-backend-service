@@ -622,6 +622,12 @@ export default function App() {
             <a href={`${REPO}/blob/main/README.md`}>Full record</a>
             <a href={`${REPO}/actions/workflows/ci.yml`}>CI runs</a>
           </p>
+          <p className="support">
+            <a href="https://github.com/sponsors/JesunAhmadUshno">Sponsor this work</a>
+            <a href="https://github.com/sponsors/JesunAhmadUshno">Donate</a>
+            <a href="https://buymeacoffee.com/jesun">Buy Me a Coffee</a>
+            <a href="https://calendly.com/jesunahmadushno/30min">Work with me</a>
+          </p>
           <p>
             Built from site/src/openapi.json, README.md, tests/, app/schemas.py, and
             ci.yml; the build fails on drift.

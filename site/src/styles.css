@@ -459,6 +459,24 @@ tbody tr:hover {
   font-weight: 500;
   white-space: nowrap;
 }
+.support {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+.support a {
+  border: var(--rule-hair) solid var(--color-rule-2);
+  border-radius: var(--radius-pill);
+  padding: var(--space-xs) var(--space-md);
+  color: var(--color-ink);
+  text-decoration: none;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.support a:hover {
+  border-color: var(--color-rule);
+  background: var(--color-paper-2);
+}
 
 @media (max-width: 60rem) {
   .figures {
