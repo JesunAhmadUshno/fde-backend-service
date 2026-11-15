@@ -137,34 +137,75 @@ runs the same suite against PostgreSQL 16.
 
 ## Deployment
 
-**Status on 2026-11-15: deployment blocked, host unreachable. No
-deployment is claimed.**
+**Status on 2026-11-15: live on BlackBoxV3, a personal fleet server,
+publicly reachable through a temporary Cloudflare quick tunnel. This
+is not a cloud-provider deployment.**
 
-The intended target is BlackBoxV2 (Ubuntu, Tailscale 100.83.221.65),
-running the Compose stack in this repo under the project name
-`fde-backend` (containers `fde-backend-app` and `fde-backend-db`, the
-app bound to the tailnet address on port 8100).
+The service was deployed on BlackBoxV3 (Ubuntu 26.04.1, Tailscale
+100.111.94.8) on 2026-11-15, after BlackBoxV2 stayed unreachable for
+the whole day (record at the end of this section). The claims ceiling
+is unchanged: a portfolio backend on a personal fleet server, never
+"production" or "customer-facing".
 
-What was verified on 2026-11-15 between 11:24 and 11:34 EST, over
-repeated attempts:
+Run route. BlackBoxV3 has no Docker and no passwordless sudo, so the
+Compose stack could not be used there. The stack runs natively in
+user space instead:
 
-- The Tailscale tunnel route works: a control connection to
-  BlackBoxV3 over the identical route answered with its SSH banner.
-- BlackBoxV2 accepts TCP connections at the tailnet layer (ports 22,
-  80, 443, 3000, 8080, 9000 all connect), but no service on the host
-  answers: SSH sends no banner within 45 seconds and the connection
-  is closed, and HTTP probes receive no response.
-- Conclusion: the host's userspace is not reachable (the machine
-  appears to be off, asleep, or hung; which of these cannot be
-  distinguished remotely). SSH access is impossible, so Docker could
-  not be inspected and nothing was deployed, started, or modified on
-  the host.
+- PostgreSQL 16.2 from the binaries bundled with the `pgserver`
+  Python package, data directory `~/fde-pgdata` on the host,
+  listening on 127.0.0.1 port 5433.
+- The app under uvicorn in a Python 3.12 virtual environment (uv
+  managed), bound to 127.0.0.1 port 8100.
+- The `.env` was generated on the server from `.env.example` with
+  server-generated secrets and has never left the host.
+- `~/fde-start.sh` on the host restarts all three processes (database,
+  app, tunnel) after a reboot; nothing auto-starts on its own.
 
-The deploy is a single step once the host is back: clone this repo on
-BlackBoxV2, create `.env` from `.env.example` with fresh secrets
-generated on the server, run `docker compose up -d --build`, then
-verify `/health` over the tailnet and record an authenticated round
-trip here. The stack itself is already proven by CI, which builds the
+Public address (temporary):
+https://precision-supervision-arts-sticker.trycloudflare.com
+
+The address is a Cloudflare quick tunnel URL. It is temporary: it
+changes whenever the tunnel process restarts, and it dies with the
+host. A named tunnel on a stable subdomain was checked first and is
+not achievable with the Cloudflare API token available here: the
+token returned an empty zone list on 2026-11-15, so it has no zone or
+DNS permission. The quick tunnel needs no account change and is
+labelled temporary everywhere it appears.
+
+Verified on 2026-11-15, from the host unless stated otherwise:
+
+- `GET /health` returned HTTP 200 with body
+  `{"status": "ok", "database": "ok"}`.
+- Authenticated round trip against the live service: seed admin login
+  200 and `GET /auth/me` showed role `admin`; the refresh endpoint
+  issued a new token pair (rotation; refresh tokens are stateless
+  JWTs, so a previous refresh token stays valid until its own expiry
+  and there is no server-side revocation list); a registered user
+  (201) logged in, created a referral (201), read it back (200, alias
+  matched), and added a nested appointment (201).
+- Denials, all against the live service: a second user reading the
+  first user's referral got 403 and saw an empty referral list; a
+  non-admin calling `GET /admin/users` got 403; an unauthenticated
+  referral list call got 401.
+- Through the public tunnel URL: `GET /health` returned 200 with the
+  same body, admin login returned 200, and `GET /admin/users`
+  returned 200 listing the 4 accounts created during the round trips.
+- One verification limit, stated plainly: requests to the tunnel URL
+  from the Muse sandbox VM were answered 403 by Cloudflare (that
+  VM's egress is a datacenter proxy). The public route was verified
+  from the host's own network through the Cloudflare edge, including
+  the authenticated calls above.
+
+BlackBoxV2 remains the intended Compose target and its deployment is
+still pending that host's return. Verified on 2026-11-15 between
+11:24 and 11:34 EST, over repeated attempts: the Tailscale route
+works (a control connection to BlackBoxV3 over the identical route
+answered), but BlackBoxV2's userspace does not answer on any port, so
+nothing was deployed, started, or modified there. The deploy there is
+a single step once the host is back: clone this repo, create `.env`
+from `.env.example` with fresh secrets generated on the server, run
+`docker compose up -d --build`, then verify `/health` over the
+tailnet. The stack itself is already proven by CI, which builds the
 Compose stack and smoke-tests the health endpoint on every push.
 
 ## License
