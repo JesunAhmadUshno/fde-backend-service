@@ -316,24 +316,23 @@ export default function App() {
             <figure className="fig">
               <ArchitectureDiagram />
               <figcaption>
-                Every box is a component in the repository. The routers and services sit
-                inside the application the factory in app/main.py builds; tests replace the
-                two outbound HTTP clients with mock transports.
+                Every box is a component in the repository. Tests replace the two
+                outbound HTTP clients with mock transports.
               </figcaption>
             </figure>
             <dl className="spec">
               <div>
                 <dt>Startup</dt>
                 <dd>
-                  The lifespan creates the schema and seeds an admin account when
-                  ADMIN_EMAIL and ADMIN_PASSWORD are set.
+                  The lifespan creates the schema and seeds an admin when ADMIN_EMAIL
+                  and ADMIN_PASSWORD are set.
                 </dd>
               </div>
               <div>
                 <dt>One schema, two databases</dt>
                 <dd>
-                  Portable column types let the same models run on PostgreSQL in deployment
-                  and CI, and on SQLite for a quick local run.
+                  Portable column types run the same models on PostgreSQL in deployment
+                  and CI, and on SQLite locally.
                 </dd>
               </div>
               <div>
@@ -348,23 +347,23 @@ export default function App() {
           <div className="container">
             <h2>Two flows, step by step</h2>
             <p className="section-line">
-              The authenticated round trip and a webhook delivery, drawn from the code
-              paths in app/deps.py, app/routers/, and app/services/webhooks.py.
+              The authenticated round trip and a webhook delivery, drawn from
+              app/deps.py, app/routers/, and app/services/webhooks.py.
             </p>
             <figure className="fig">
               <AuthFlowDiagram />
               <figcaption>
                 The authenticated round trip. Token lifetimes are the defaults in
-                app/config.py; POST /auth/refresh rotates the pair, and a token of the
-                wrong type is rejected, which the suite tests directly.
+                app/config.py; /auth/refresh rotates the pair, and a wrong-type token
+                is rejected and tested.
               </figcaption>
             </figure>
             <figure className="fig">
               <WebhookFlowDiagram events={data.webhookEvents} />
               <figcaption>
-                Webhook delivery with retries. The attempt cap, backoff, and timeout are
-                settings in app/config.py (3 attempts, 5 second timeout); the delivery
-                log is the record a reviewer reads back through the API.
+                Webhook delivery with retries: 3 attempts, 5 second timeout, both
+                settings in app/config.py. Every attempt lands in the delivery log,
+                read back through the API.
               </figcaption>
             </figure>
           </div>
@@ -374,10 +373,8 @@ export default function App() {
           <div className="container">
             <h2>Endpoint register</h2>
             <p className="section-line">
-              The full HTTP surface, derived at build time from the OpenAPI schema the
-              app itself serves (site/src/openapi.json) and checked against the table
-              in README.md. Filter it by access, method, or text, and open a row for
-              its parameters and response codes.
+              The full HTTP surface, derived from the OpenAPI schema the app serves
+              and checked against README.md.
             </p>
             <div className="filters">
               <label className="field">
@@ -446,9 +443,10 @@ export default function App() {
                               type="button"
                               className="row-toggle"
                               aria-expanded={open}
+                              aria-label={`${open ? "Hide" : "Show"} schema for ${e.method} ${e.path}`}
                               onClick={() => setOpenKey(open ? null : key)}
                             >
-                              {open ? "Hide" : "Schema"}
+                              {open ? "−" : "+"}
                             </button>
                           </td>
                         </tr>
@@ -503,8 +501,8 @@ export default function App() {
           <div className="container">
             <h2>Who can do what</h2>
             <p className="section-line">
-              Two roles, enforced per route. A signed-in user who reaches for another
-              owner&apos;s record gets a 403, and the denials are covered by{" "}
+              Two roles, enforced per route. Another owner&apos;s record returns a
+              403, and the denials are covered by{" "}
               {authTests ? authTests.count : 0} tests in tests/test_authorization.py.
             </p>
             <div className="table-wrap">
@@ -536,8 +534,8 @@ export default function App() {
           <div className="container">
             <h2>Test evidence</h2>
             <p className="section-line">
-              {data.tests.total} tests, counted from the files under tests/ at build time.
-              This page fails to build if that count and the README ever disagree.
+              {data.tests.total} tests, counted from tests/ at build time. The build
+              fails if the count and the README disagree.
             </p>
             <div className="two-col">
               <div className="table-wrap">
@@ -568,10 +566,9 @@ export default function App() {
                 <div>
                   <dt>What the suite covers</dt>
                   <dd>
-                    Registration and login, token refresh and type confusion, cross-owner
-                    denials, full CRUD cycles, webhook signing, delivery success and
-                    retry-then-fail with the attempt count in the log, and the weather
-                    integration with the upstream API mocked.
+                    Registration, login, token refresh and type confusion, cross-owner
+                    denials, CRUD, webhook signing and retry, and the mocked weather
+                    integration.
                   </dd>
                 </div>
               </dl>
@@ -597,8 +594,8 @@ export default function App() {
                 <dt>What was verified</dt>
                 <dd>
                   On 2026-11-15, 11:24 to 11:34 EST, BlackBoxV3 answered over the same
-                  route; BlackBoxV2 accepted connections and no service replied. Nothing
-                  was deployed, started, or modified.
+                  route; BlackBoxV2 replied to nothing. Nothing was deployed, started,
+                  or modified.
                 </dd>
               </div>
               <div>
@@ -626,11 +623,8 @@ export default function App() {
             <a href={`${REPO}/actions/workflows/ci.yml`}>CI runs</a>
           </p>
           <p>
-            This sheet is generated at build time from the OpenAPI schema in
-            site/src/openapi.json (regenerated from the app by site/tools/gen_openapi.py),
-            README.md, the tests under tests/, app/schemas.py, and
-            .github/workflows/ci.yml. The build fails if the record drifts. Set in
-            Chakra Petch and IBM Plex Sans on the Blueprint sheet.
+            Generated at build time from site/src/openapi.json, README.md, tests/,
+            app/schemas.py, and ci.yml. The build fails if the record drifts.
           </p>
         </div>
       </footer>
