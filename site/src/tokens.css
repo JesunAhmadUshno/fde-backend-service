@@ -17,5 +17,8 @@
   --font-display: "Chakra Petch", ui-sans-serif, sans-serif; --font-body: "IBM Plex Sans", ui-sans-serif, sans-serif;
   --font-outlier: "IBM Plex Mono", ui-monospace, monospace;
   --radius-card: 0; --radius-pill: 0; --rule-hair: 1px; --rule-heavy: 2px; --shadow-card: none;
+  --scb-bg: var(--color-paper-2); --scb-fg: var(--color-ink); --scb-accent: var(--color-ink);
+  --scb-accent-fg: var(--color-accent-ink); --scb-border: var(--color-rule-2);
+  --scb-radius: var(--radius-pill); --scb-font: var(--font-body);
   --tracking-display: -0.012em; --display-weight: 600; --sheet-inset: 20px; --tick: 14px;
 }
