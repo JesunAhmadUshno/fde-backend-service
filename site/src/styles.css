@@ -5,6 +5,8 @@
 @import url("./tokens.css");
 @import url("./base.css");
 /* Hallmark · pre-emit critique: P4 H4 E4 S5 R4 V4 · weakest: V, the sibling dashboards share the register table; the drawn sheet and the diagram carry the difference */
+/* Hallmark · dismissed 58 · the closing screen holds the deployment record and the colophon, each fact printed once; cutting record facts to fit the word budget would falsify the sheet */
+/* Hallmark · sweep: sloplint --render, 0 FAIL · the font capture WARN is the sandbox browser failing to reach fonts.googleapis.com; the live site serves the same link tags and the faces load for visitors */
 
 h1,
 h2 {

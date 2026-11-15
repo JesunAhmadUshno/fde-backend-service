@@ -586,8 +586,8 @@ export default function App() {
               <div>
                 <dt>Intended target</dt>
                 <dd>
-                  BlackBoxV2 (Tailscale 100.83.221.65), the Compose stack as fde-backend,
-                  app on port 8100.
+                  BlackBoxV2 (Tailscale 100.83.221.65), Compose project fde-backend, app
+                  on port 8100.
                 </dd>
               </div>
               <div>
@@ -599,10 +599,10 @@ export default function App() {
                 </dd>
               </div>
               <div>
-                <dt>The one step left</dt>
+                <dt>The step left</dt>
                 <dd>
                   Clone, create .env with server-generated secrets, docker compose up,
-                  verify /health over the tailnet. CI already proves the stack.
+                  verify /health over the tailnet.
                 </dd>
               </div>
             </dl>
@@ -619,12 +619,12 @@ export default function App() {
           </p>
           <p className="foot-links">
             <a href={REPO}>Repository</a>
-            <a href={`${REPO}/blob/main/README.md`}>README and full record</a>
+            <a href={`${REPO}/blob/main/README.md`}>Full record</a>
             <a href={`${REPO}/actions/workflows/ci.yml`}>CI runs</a>
           </p>
           <p>
-            Generated at build time from site/src/openapi.json, README.md, tests/,
-            app/schemas.py, and ci.yml. The build fails if the record drifts.
+            Built from site/src/openapi.json, README.md, tests/, app/schemas.py, and
+            ci.yml; the build fails on drift.
           </p>
         </div>
       </footer>
