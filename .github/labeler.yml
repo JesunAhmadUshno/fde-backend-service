@@ -1,0 +1,15 @@
+source:
+  - changed-files:
+      - any-glob-to-any-file: ["app/**"]
+tests:
+  - changed-files:
+      - any-glob-to-any-file: ["tests/**"]
+docs:
+  - changed-files:
+      - any-glob-to-any-file: ["docs/**", "README.md", "REPORT.md", "CHANGELOG.md"]
+site:
+  - changed-files:
+      - any-glob-to-any-file: ["site/**"]
+automation:
+  - changed-files:
+      - any-glob-to-any-file: [".github/**"]
